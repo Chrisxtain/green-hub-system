@@ -1,0 +1,157 @@
+
+import { useAuth } from '@/hooks/useAuth';
+import { UserProfile } from '@/components/auth/UserProfile';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Recycle, MapPin, Gift, BookOpen, TrendingUp } from 'lucide-react';
+
+export default function Dashboard() {
+  const { profile } = useAuth();
+
+  const quickActions = [
+    {
+      title: 'Report Waste',
+      description: 'Upload a photo and location of waste',
+      icon: Recycle,
+      color: 'bg-green-500',
+      action: () => console.log('Navigate to waste report'),
+    },
+    {
+      title: 'Find Bins',
+      description: 'Locate nearby recycling bins',
+      icon: MapPin,
+      color: 'bg-blue-500',
+      action: () => console.log('Navigate to bin locator'),
+    },
+    {
+      title: 'Rewards',
+      description: 'Redeem your points for rewards',
+      icon: Gift,
+      color: 'bg-purple-500',
+      action: () => console.log('Navigate to rewards'),
+    },
+    {
+      title: 'Learn',
+      description: 'Recycling guides and tips',
+      icon: BookOpen,
+      color: 'bg-orange-500',
+      action: () => console.log('Navigate to education hub'),
+    },
+  ];
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 p-4">
+      <div className="max-w-6xl mx-auto space-y-6">
+        {/* Header */}
+        <div className="text-center">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Welcome back, {profile?.full_name || 'User'}! 🌱
+          </h1>
+          <p className="text-gray-600">
+            Let's make our campus greener together
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* User Profile Card */}
+          <div className="lg:col-span-1">
+            <UserProfile />
+          </div>
+
+          {/* Quick Actions */}
+          <div className="lg:col-span-2">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <TrendingUp className="h-5 w-5" />
+                  Quick Actions
+                </CardTitle>
+                <CardDescription>
+                  What would you like to do today?
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {quickActions.map((action, index) => (
+                    <Button
+                      key={index}
+                      variant="outline"
+                      className="h-auto p-4 flex flex-col items-start space-y-2 hover:shadow-md transition-shadow"
+                      onClick={action.action}
+                    >
+                      <div className={`p-2 rounded-lg ${action.color} text-white`}>
+                        <action.icon className="h-6 w-6" />
+                      </div>
+                      <div className="text-left">
+                        <div className="font-semibold text-gray-900">{action.title}</div>
+                        <div className="text-sm text-gray-600">{action.description}</div>
+                      </div>
+                    </Button>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg">Your Impact</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-sm text-gray-600">Reports Made:</span>
+                  <span className="font-semibold">0</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm text-gray-600">Waste Collected:</span>
+                  <span className="font-semibold">0 kg</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm text-gray-600">CO₂ Saved:</span>
+                  <span className="font-semibold">0 kg</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg">Campus Stats</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-sm text-gray-600">Active Users:</span>
+                  <span className="font-semibold">1</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm text-gray-600">Total Reports:</span>
+                  <span className="font-semibold">0</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm text-gray-600">Recycled Today:</span>
+                  <span className="font-semibold">0 kg</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg">Leaderboard</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-center py-4">
+                <p className="text-gray-500 text-sm">Start reporting waste to climb the leaderboard!</p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
+  );
+}
