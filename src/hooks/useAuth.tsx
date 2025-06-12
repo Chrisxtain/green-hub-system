@@ -66,7 +66,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .single();
 
       if (error) throw error;
-      setProfile(data);
+      
+      // Type assertion to ensure role is properly typed
+      const profileData: Profile = {
+        ...data,
+        role: data.role as 'student' | 'staff' | 'admin' | 'recycler'
+      };
+      
+      setProfile(profileData);
     } catch (error) {
       console.error('Error fetching profile:', error);
       toast({
