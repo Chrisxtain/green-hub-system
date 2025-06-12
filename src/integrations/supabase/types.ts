@@ -42,6 +42,54 @@ export type Database = {
         }
         Relationships: []
       }
+      waste_reports: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          image_url: string | null
+          latitude: number | null
+          location_name: string | null
+          longitude: number | null
+          points_awarded: number | null
+          status: string
+          title: string
+          updated_at: string
+          user_id: string
+          waste_type: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          latitude?: number | null
+          location_name?: string | null
+          longitude?: number | null
+          points_awarded?: number | null
+          status?: string
+          title: string
+          updated_at?: string
+          user_id: string
+          waste_type: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          latitude?: number | null
+          location_name?: string | null
+          longitude?: number | null
+          points_awarded?: number | null
+          status?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+          waste_type?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

@@ -1,12 +1,15 @@
 
 import { useAuth } from '@/hooks/useAuth';
 import { UserProfile } from '@/components/auth/UserProfile';
+import { WasteReportsList } from '@/components/waste/WasteReportsList';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Recycle, MapPin, Gift, BookOpen, TrendingUp } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Dashboard() {
   const { profile } = useAuth();
+  const navigate = useNavigate();
 
   const quickActions = [
     {
@@ -14,7 +17,7 @@ export default function Dashboard() {
       description: 'Upload a photo and location of waste',
       icon: Recycle,
       color: 'bg-green-500',
-      action: () => console.log('Navigate to waste report'),
+      action: () => navigate('/report-waste'),
     },
     {
       title: 'Find Bins',
@@ -94,62 +97,61 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-lg">Your Impact</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-sm text-gray-600">Reports Made:</span>
-                  <span className="font-semibold">0</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-gray-600">Waste Collected:</span>
-                  <span className="font-semibold">0 kg</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-gray-600">CO₂ Saved:</span>
-                  <span className="font-semibold">0 kg</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+        {/* Stats and Recent Reports */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Recent Reports */}
+          <WasteReportsList />
 
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-lg">Campus Stats</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-sm text-gray-600">Active Users:</span>
-                  <span className="font-semibold">1</span>
+          {/* Stats Cards */}
+          <div className="space-y-6">
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg">Your Impact</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-600">Current Points:</span>
+                    <span className="font-semibold text-green-600">{profile?.points || 0}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-600">Reports Made:</span>
+                    <span className="font-semibold">0</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-600">Waste Collected:</span>
+                    <span className="font-semibold">0 kg</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-600">CO₂ Saved:</span>
+                    <span className="font-semibold">0 kg</span>
+                  </div>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-gray-600">Total Reports:</span>
-                  <span className="font-semibold">0</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-gray-600">Recycled Today:</span>
-                  <span className="font-semibold">0 kg</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
 
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-lg">Leaderboard</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-center py-4">
-                <p className="text-gray-500 text-sm">Start reporting waste to climb the leaderboard!</p>
-              </div>
-            </CardContent>
-          </Card>
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg">Campus Stats</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-600">Active Users:</span>
+                    <span className="font-semibold">1</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-600">Total Reports:</span>
+                    <span className="font-semibold">0</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm text-gray-600">Recycled Today:</span>
+                    <span className="font-semibold">0 kg</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
     </div>
