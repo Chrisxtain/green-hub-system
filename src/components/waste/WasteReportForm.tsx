@@ -17,24 +17,22 @@ export function WasteReportForm() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
+    title: '',
     waste_type: '',
     description: '',
     location_name: '',
     latitude: null as number | null,
     longitude: null as number | null,
-    photo_url: '',
+    image_url: '',
   });
 
   const wasteTypes = [
-    'plastic_bottles',
-    'food_waste',
+    'plastic',
     'paper',
-    'cardboard',
-    'aluminum_cans',
     'glass',
-    'electronics',
-    'textiles',
-    'batteries',
+    'metal',
+    'organic',
+    'electronic',
     'other'
   ];
 
@@ -75,10 +73,10 @@ export function WasteReportForm() {
       return;
     }
 
-    if (!form.waste_type || !form.location_name) {
+    if (!form.waste_type || !form.location_name || !form.title) {
       toast({
         title: "Missing information",
-        description: "Please fill in waste type and location.",
+        description: "Please fill in title, waste type and location.",
         variant: "destructive",
       });
       return;
@@ -89,16 +87,17 @@ export function WasteReportForm() {
       // Submit waste report
       const { error: reportError } = await supabase
         .from('waste_reports')
-        .insert([{
+        .insert({
           user_id: user.id,
+          title: form.title,
           waste_type: form.waste_type,
           description: form.description,
           location_name: form.location_name,
           latitude: form.latitude,
           longitude: form.longitude,
-          photo_url: form.photo_url || null,
+          image_url: form.image_url || null,
           status: 'pending',
-        }]);
+        });
 
       if (reportError) throw reportError;
 
@@ -118,12 +117,13 @@ export function WasteReportForm() {
 
       // Reset form
       setForm({
+        title: '',
         waste_type: '',
         description: '',
         location_name: '',
         latitude: null,
         longitude: null,
-        photo_url: '',
+        image_url: '',
       });
 
     } catch (error) {
@@ -171,6 +171,17 @@ export function WasteReportForm() {
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
+            <Label htmlFor="title">Report Title *</Label>
+            <Input
+              id="title"
+              value={form.title}
+              onChange={(e) => setForm(prev => ({ ...prev, title: e.target.value }))}
+              placeholder="e.g., Plastic bottles near library"
+              required
+            />
+          </div>
+
+          <div className="space-y-2">
             <Label htmlFor="waste-type">Waste Type *</Label>
             <Select value={form.waste_type} onValueChange={(value) => setForm(prev => ({ ...prev, waste_type: value }))}>
               <SelectTrigger>
@@ -179,7 +190,7 @@ export function WasteReportForm() {
               <SelectContent>
                 {wasteTypes.map((type) => (
                   <SelectItem key={type} value={type}>
-                    {type.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                    {type.charAt(0).toUpperCase() + type.slice(1)}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -219,11 +230,11 @@ export function WasteReportForm() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="photo">Photo URL (Optional)</Label>
+            <Label htmlFor="image">Image URL (Optional)</Label>
             <Input
-              id="photo"
-              value={form.photo_url}
-              onChange={(e) => setForm(prev => ({ ...prev, photo_url: e.target.value }))}
+              id="image"
+              value={form.image_url}
+              onChange={(e) => setForm(prev => ({ ...prev, image_url: e.target.value }))}
               placeholder="https://example.com/photo.jpg"
               type="url"
             />
