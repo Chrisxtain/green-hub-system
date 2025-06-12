@@ -6,7 +6,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
-import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+import { OptionalAuthRoute } from "@/components/auth/OptionalAuthRoute";
+import { AuthForm } from "@/components/auth/AuthForm";
 import Dashboard from "./pages/Dashboard";
 import ReportWaste from "./pages/ReportWaste";
 import Rewards from "./pages/Rewards";
@@ -14,10 +15,9 @@ import BinLocator from "./pages/BinLocator";
 import EducationHub from "./pages/EducationHub";
 import NotFound from "./pages/NotFound";
 
-const App = () => {
-  // Create QueryClient inside the component to ensure React is fully initialized
-  const queryClient = React.useMemo(() => new QueryClient(), []);
+const queryClient = new QueryClient();
 
+const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
@@ -29,44 +29,47 @@ const App = () => {
               <Route 
                 path="/" 
                 element={
-                  <ProtectedRoute>
+                  <OptionalAuthRoute>
                     <Dashboard />
-                  </ProtectedRoute>
+                  </OptionalAuthRoute>
                 } 
+              />
+              <Route 
+                path="/auth" 
+                element={<AuthForm />} 
               />
               <Route 
                 path="/report-waste" 
                 element={
-                  <ProtectedRoute>
+                  <OptionalAuthRoute>
                     <ReportWaste />
-                  </ProtectedRoute>
+                  </OptionalAuthRoute>
                 } 
               />
               <Route 
                 path="/rewards" 
                 element={
-                  <ProtectedRoute>
+                  <OptionalAuthRoute>
                     <Rewards />
-                  </ProtectedRoute>
+                  </OptionalAuthRoute>
                 } 
               />
               <Route 
                 path="/bin-locator" 
                 element={
-                  <ProtectedRoute>
+                  <OptionalAuthRoute>
                     <BinLocator />
-                  </ProtectedRoute>
+                  </OptionalAuthRoute>
                 } 
               />
               <Route 
                 path="/education" 
                 element={
-                  <ProtectedRoute>
+                  <OptionalAuthRoute>
                     <EducationHub />
-                  </ProtectedRoute>
+                  </OptionalAuthRoute>
                 } 
               />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
