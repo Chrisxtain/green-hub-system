@@ -13,6 +13,7 @@ import ReportWaste from "./pages/ReportWaste";
 import Rewards from "./pages/Rewards";
 import BinLocator from "./pages/BinLocator";
 import EducationHub from "./pages/EducationHub";
+import Blog from "./pages/Blog";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -67,6 +68,14 @@ const App = () => {
                 element={
                   <OptionalAuthRoute>
                     <EducationHub />
+                  </OptionalAuthRoute>
+                } 
+              />
+              <Route 
+                path="/blog" 
+                element={
+                  <OptionalAuthRoute>
+                    <Blog />
                   </OptionalAuthRoute>
                 } 
               />

@@ -4,7 +4,7 @@ import { UserProfile } from '@/components/auth/UserProfile';
 import { WasteReportsList } from '@/components/waste/WasteReportsList';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Recycle, MapPin, Gift, BookOpen, TrendingUp, LogIn } from 'lucide-react';
+import { Recycle, MapPin, Gift, BookOpen, TrendingUp, LogIn, FileText } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 export default function Dashboard() {
@@ -40,6 +40,13 @@ export default function Dashboard() {
       color: 'bg-orange-500',
       action: () => navigate('/education'),
     },
+    {
+      title: 'Blog',
+      description: 'Read waste management articles',
+      icon: FileText,
+      color: 'bg-indigo-500',
+      action: () => navigate('/blog'),
+    },
   ];
 
   return (
@@ -47,6 +54,15 @@ export default function Dashboard() {
       <div className="max-w-6xl mx-auto space-y-6">
         {/* Header */}
         <div className="text-center">
+          <div className="flex justify-between items-center mb-4">
+            <div></div>
+            {!user && (
+              <Button onClick={() => navigate('/auth')} className="bg-green-600 hover:bg-green-700">
+                <LogIn className="h-4 w-4 mr-2" />
+                Sign In / Sign Up
+              </Button>
+            )}
+          </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Welcome to EcoTrack! 🌱
           </h1>
@@ -55,10 +71,9 @@ export default function Dashboard() {
           </p>
           {!user && (
             <div className="mt-4">
-              <Button onClick={() => navigate('/auth')} className="bg-green-600 hover:bg-green-700">
-                <LogIn className="h-4 w-4 mr-2" />
-                Sign In to Track Your Impact
-              </Button>
+              <p className="text-sm text-gray-500 mb-2">
+                Browse content freely or sign in to track your impact and earn rewards
+              </p>
             </div>
           )}
         </div>
@@ -84,7 +99,7 @@ export default function Dashboard() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {quickActions.map((action, index) => (
                     <Button
                       key={index}
