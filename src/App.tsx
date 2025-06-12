@@ -9,6 +9,9 @@ import { AuthProvider } from "@/hooks/useAuth";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import Dashboard from "./pages/Dashboard";
 import ReportWaste from "./pages/ReportWaste";
+import Rewards from "./pages/Rewards";
+import BinLocator from "./pages/BinLocator";
+import EducationHub from "./pages/EducationHub";
 import NotFound from "./pages/NotFound";
 
 const App = () => {
@@ -36,6 +39,30 @@ const App = () => {
                 element={
                   <ProtectedRoute>
                     <ReportWaste />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/rewards" 
+                element={
+                  <ProtectedRoute>
+                    <Rewards />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/bin-locator" 
+                element={
+                  <ProtectedRoute>
+                    <BinLocator />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/education" 
+                element={
+                  <ProtectedRoute>
+                    <EducationHub />
                   </ProtectedRoute>
                 } 
               />

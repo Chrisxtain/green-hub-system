@@ -24,21 +24,21 @@ export default function Dashboard() {
       description: 'Locate nearby recycling bins',
       icon: MapPin,
       color: 'bg-blue-500',
-      action: () => console.log('Navigate to bin locator'),
+      action: () => navigate('/bin-locator'),
     },
     {
       title: 'Rewards',
       description: 'Redeem your points for rewards',
       icon: Gift,
       color: 'bg-purple-500',
-      action: () => console.log('Navigate to rewards'),
+      action: () => navigate('/rewards'),
     },
     {
       title: 'Learn',
       description: 'Recycling guides and tips',
       icon: BookOpen,
       color: 'bg-orange-500',
-      action: () => console.log('Navigate to education hub'),
+      action: () => navigate('/education'),
     },
   ];
 
