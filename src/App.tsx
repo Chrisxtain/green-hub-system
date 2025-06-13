@@ -14,6 +14,7 @@ import Rewards from "./pages/Rewards";
 import BinLocator from "./pages/BinLocator";
 import EducationHub from "./pages/EducationHub";
 import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
