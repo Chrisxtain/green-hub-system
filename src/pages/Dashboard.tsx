@@ -1,4 +1,3 @@
-
 import { useAuth } from '@/hooks/useAuth';
 import { UserProfile } from '@/components/auth/UserProfile';
 import { WasteReportsList } from '@/components/waste/WasteReportsList';
@@ -6,10 +5,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Recycle, MapPin, Gift, BookOpen, TrendingUp, LogIn, FileText } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 export default function Dashboard() {
-  const { profile, user } = useAuth();
+  const { profile, user, loading } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log('Dashboard mounted');
+    console.log('Auth state:', { user: !!user, profile: !!profile, loading });
+  }, [user, profile, loading]);
 
   const quickActions = [
     {
