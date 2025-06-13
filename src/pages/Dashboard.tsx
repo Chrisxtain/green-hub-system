@@ -1,3 +1,4 @@
+
 import { useAuth } from '@/hooks/useAuth';
 import { UserProfile } from '@/components/auth/UserProfile';
 import { WasteReportsList } from '@/components/waste/WasteReportsList';
@@ -57,24 +58,30 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 p-4">
       <div className="max-w-6xl mx-auto space-y-6">
-        {/* Header */}
+        {/* Header with Sign In Button */}
+        <div className="flex justify-between items-center">
+          <div></div>
+          {(!user || !profile) && (
+            <Button 
+              onClick={() => navigate('/auth')} 
+              className="bg-green-600 hover:bg-green-700 shadow-lg"
+              size="lg"
+            >
+              <LogIn className="h-4 w-4 mr-2" />
+              Sign In / Sign Up
+            </Button>
+          )}
+        </div>
+
+        {/* Welcome Section */}
         <div className="text-center">
-          <div className="flex justify-between items-center mb-4">
-            <div></div>
-            {!user && (
-              <Button onClick={() => navigate('/auth')} className="bg-green-600 hover:bg-green-700">
-                <LogIn className="h-4 w-4 mr-2" />
-                Sign In / Sign Up
-              </Button>
-            )}
-          </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Welcome to EcoTrack! 🌱
           </h1>
           <p className="text-gray-600">
             Making our campus greener together
           </p>
-          {!user && (
+          {(!user || !profile) && (
             <div className="mt-4">
               <p className="text-sm text-gray-500 mb-2">
                 Browse content freely or sign in to track your impact and earn rewards
@@ -85,14 +92,14 @@ export default function Dashboard() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* User Profile Card - only show if logged in */}
-          {user && (
+          {user && profile && (
             <div className="lg:col-span-1">
               <UserProfile />
             </div>
           )}
 
           {/* Quick Actions */}
-          <div className={user ? "lg:col-span-2" : "lg:col-span-3"}>
+          <div className={(user && profile) ? "lg:col-span-2" : "lg:col-span-3"}>
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -100,7 +107,7 @@ export default function Dashboard() {
                   Quick Actions
                 </CardTitle>
                 <CardDescription>
-                  {user ? "What would you like to do today?" : "Explore what you can do with EcoTrack"}
+                  {(user && profile) ? "What would you like to do today?" : "Explore what you can do with EcoTrack"}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -134,7 +141,7 @@ export default function Dashboard() {
 
           {/* Stats Cards */}
           <div className="space-y-6">
-            {user ? (
+            {(user && profile) ? (
               <Card>
                 <CardHeader className="pb-2">
                   <CardTitle className="text-lg">Your Impact</CardTitle>

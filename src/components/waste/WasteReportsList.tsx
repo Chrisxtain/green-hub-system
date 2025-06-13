@@ -20,16 +20,22 @@ interface WasteReport {
 }
 
 export function WasteReportsList() {
-  const { data: reports, isLoading } = useQuery({
+  const { data: reports, isLoading, error } = useQuery({
     queryKey: ['waste-reports'],
     queryFn: async () => {
+      console.log('Fetching waste reports...');
       const { data, error } = await supabase
         .from('waste_reports')
         .select('*')
         .order('created_at', { ascending: false })
         .limit(10);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching waste reports:', error);
+        throw error;
+      }
+      
+      console.log('Fetched reports:', data);
       return data as WasteReport[];
     },
   });
@@ -54,6 +60,22 @@ export function WasteReportsList() {
       default: return '🗑️';
     }
   };
+
+  if (error) {
+    console.error('WasteReportsList error:', error);
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Recent Reports</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-center text-red-500 py-8">
+            Unable to load reports. Please try again later.
+          </p>
+        </CardContent>
+      </Card>
+    );
+  }
 
   if (isLoading) {
     return (
@@ -121,9 +143,11 @@ export function WasteReportsList() {
             ))}
           </div>
         ) : (
-          <p className="text-center text-gray-500 py-8">
-            No waste reports yet. Be the first to report!
-          </p>
+          <div className="text-center py-8">
+            <div className="text-4xl mb-2">📝</div>
+            <p className="text-gray-500 mb-4">No waste reports yet</p>
+            <p className="text-sm text-gray-400">Be the first to report waste and help make our campus cleaner!</p>
+          </div>
         )}
       </CardContent>
     </Card>
