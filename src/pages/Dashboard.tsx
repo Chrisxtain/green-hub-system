@@ -55,13 +55,25 @@ export default function Dashboard() {
     },
   ];
 
+  // Don't render anything while loading to prevent flashing
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 p-4 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 p-4">
       <div className="max-w-6xl mx-auto space-y-6">
         {/* Header with Sign In Button */}
         <div className="flex justify-between items-center">
           <div></div>
-          {(!user || !profile) && (
+          {!user && (
             <Button 
               onClick={() => navigate('/auth')} 
               className="bg-green-600 hover:bg-green-700 shadow-lg"
@@ -75,18 +87,29 @@ export default function Dashboard() {
 
         {/* Welcome Section */}
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Welcome to EcoTrack! 🌱
-          </h1>
-          <p className="text-gray-600">
-            Making our campus greener together
-          </p>
-          {(!user || !profile) && (
-            <div className="mt-4">
-              <p className="text-sm text-gray-500 mb-2">
-                Browse content freely or sign in to track your impact and earn rewards
+          {user && profile ? (
+            <>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                Welcome back, {profile.full_name || 'User'}! 🌱
+              </h1>
+              <p className="text-gray-600">
+                Ready to make our campus greener today?
               </p>
-            </div>
+            </>
+          ) : (
+            <>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                Welcome to EcoTrack! 🌱
+              </h1>
+              <p className="text-gray-600">
+                Making our campus greener together
+              </p>
+              <div className="mt-4">
+                <p className="text-sm text-gray-500 mb-2">
+                  Browse content freely or sign in to track your impact and earn rewards
+                </p>
+              </div>
+            </>
           )}
         </div>
 
