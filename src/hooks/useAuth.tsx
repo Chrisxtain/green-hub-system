@@ -1,4 +1,3 @@
-
 import { useState, useEffect, createContext, useContext } from 'react';
 import { User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
@@ -33,19 +32,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        fetchProfile(session.user.id);
-      } else {
-        setLoading(false);
-      }
-    });
-
-    // Listen for auth changes
+    console.log('AuthProvider: Setting up auth state listener');
+    
+    // Listen for auth changes first
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log('Auth state changed:', event, 'User:', !!session?.user);
       setUser(session?.user ?? null);
+      
       if (session?.user) {
         await fetchProfile(session.user.id);
       } else {
@@ -54,34 +47,58 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     });
 
-    return () => subscription.unsubscribe();
+    // Then get initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log('Initial session check:', !!session?.user);
+      setUser(session?.user ?? null);
+      if (session?.user) {
+        fetchProfile(session.user.id);
+      } else {
+        setLoading(false);
+      }
+    });
+
+    return () => {
+      console.log('AuthProvider: Cleaning up subscription');
+      subscription.unsubscribe();
+    };
   }, []);
 
   const fetchProfile = async (userId: string) => {
     try {
+      console.log('Fetching profile for user:', userId);
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', userId)
         .single();
 
-      if (error) throw error;
-      
-      // Type assertion to ensure role is properly typed
-      const profileData: Profile = {
-        ...data,
-        role: data.role as 'student' | 'staff' | 'admin' | 'recycler'
-      };
-      
-      setProfile(profileData);
+      if (error) {
+        // If profile doesn't exist, that's not necessarily an error for new users
+        if (error.code === 'PGRST116') {
+          console.log('Profile not found for user:', userId);
+          setProfile(null);
+        } else {
+          console.error('Error fetching profile:', error);
+          toast({
+            title: "Error",
+            description: "Failed to load user profile",
+            variant: "destructive",
+          });
+        }
+      } else {
+        console.log('Profile fetched successfully:', data);
+        // Type assertion to ensure role is properly typed
+        const profileData: Profile = {
+          ...data,
+          role: data.role as 'student' | 'staff' | 'admin' | 'recycler'
+        };
+        setProfile(profileData);
+      }
     } catch (error) {
-      console.error('Error fetching profile:', error);
-      toast({
-        title: "Error",
-        description: "Failed to load user profile",
-        variant: "destructive",
-      });
+      console.error('Unexpected error fetching profile:', error);
     } finally {
+      console.log('Setting loading to false');
       setLoading(false);
     }
   };
